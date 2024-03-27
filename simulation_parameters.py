@@ -3,7 +3,7 @@ class SimulationParameters:
         self.step_size = step_size
         self.simulation_duration = simulation_duration
 
-        self.input_functon = input_function
+        self.input_function = input_function
 
         self.k = k
         self.b = b

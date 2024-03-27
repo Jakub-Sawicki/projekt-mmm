@@ -1,31 +1,28 @@
-class RKSimulation:
-    def __init__(self, parameters):
-        self.parameters = parameters
-        self.theta = []
-        self.rot_speed = []
+from simulation import Simulation
 
+class RKSimulation(Simulation):
     def rk4(self):
-        self.theta[0] = 0
-        self.rot_speed[0] = 0
+        h = self.parameters.step_size
+        x = 0
+        v = 0
+        t = 0
 
-        def f1(t, x, v):
-            return v
-        
-        def f2(t, x, v):
-            a1 = self.parameters.input_function(t)/(self.parameters.J1*self.parameters.n2/self.parameters.n1 + self.parameters.J2)
-            a2 = self.parameters.k/(self.parameters.J1+self.parameters.J2*self.parameters.n1/self.parameters.n2)
-            a3 = self.parameters.b/(self.parameters.J*self.parameters.n2/self.parameters.n1 + self.parameters.J2)
+        for i in range(int(self.number_of_steps)):
+            K1x = self.f1(t, x, v)
+            K1v = self.f2(t, x, v)
+            K2x = self.f1(t + h/2, x + h*K1x/2, v + h*K1v/2)
+            K2v = self.f2(t + h/2, x + h*K1x/2, v + h*K1v/2)
+            K3x = self.f1(t + h/2, x + h*K2x/2, v + h*K2v/2)
+            K3v = self.f2(t + h/2, x + h*K2x/2, v + h*K2v/2)
+            K4x = self.f1(t + h, x + h*K3x, v + h*K3v) 
+            K4v = self.f2(t + h, x + h*K3x, v + h*K3v)
+            x = x + h/6*(K1x + 2*K2x + 2*K3x + K4x)
+            v = v + h/6*(K1v + 2*K2v + 2*K3v + K4v)
+            t = t + h
 
-            return a1 - a2*x - a3*v
-
-
-
+            self.theta.append(x)
+            self.rot_speed.append(v)
+            self.time.append(t)
     
-
-    
-    
-
-
-    
-
+        return self.theta, self.rot_speed, self.time
     
