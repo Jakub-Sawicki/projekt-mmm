@@ -1,6 +1,6 @@
 from gui import GUI
 from rk_simulation import RKSimulation
-
+print("test")
 gui = GUI()
 parameters = gui.get_parameters()
 
