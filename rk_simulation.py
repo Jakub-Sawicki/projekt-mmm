@@ -6,7 +6,7 @@ class RKSimulation(Simulation):
         x = 0
         v = 0
         t = 0
-
+        max = 0
         for i in range(int(self.number_of_steps)):
             K1x = self.f1(t, x, v)
             K1v = self.f2(t, x, v)
@@ -19,10 +19,11 @@ class RKSimulation(Simulation):
             x = x + h/6*(K1x + 2*K2x + 2*K3x + K4x)
             v = v + h/6*(K1v + 2*K2v + 2*K3v + K4v)
             t = t + h
-
+            #if x > max:
+            #    max = x
             self.theta.append(x)
             self.rot_speed.append(v)
             self.time.append(t)
-    
+        #print(max)
         return self.theta, self.rot_speed, self.time
     
