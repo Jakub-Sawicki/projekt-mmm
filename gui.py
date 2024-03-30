@@ -4,6 +4,8 @@ import math
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 from tkinter import *
+from rk_simulation import RKSimulation
+from eu_simulation import Eu_simulation
 #import PySimpleGUI as sg
 #import numpy as np
 
@@ -67,10 +69,12 @@ class GUI:
 
         canvas.get_tk_widget().pack()
         
-    #, step_size, simulation_duration, k, b, n1, n2, J1, J2
-    
-    def show_gui(self, theta_rk, rot_speed_rk, theta_eu, rot_speed_eu, time):
+    def show_gui(self):
+            rk_simulation = RKSimulation(self.get_parameters())
+            eu_simulation = Eu_simulation(self.get_parameters())
             def plot_display():
+                theta_eu, rot_speed_eu, time = eu_simulation.eu()
+                theta_rk, rot_speed_rk, time = rk_simulation.rk4()
                 fig, axes = plt.subplots(2, 2, figsize=(6, 4.5))  # 1 row, 2 columns
 
                 # theta plot
@@ -160,6 +164,9 @@ class GUI:
             J2_new.pack()
 
             def clicked():
+                for widget in root.winfo_children():
+                    if isinstance(widget, Label) and widget.cget("text") != "Write down parameters you want to update" and widget.cget("text") != "k: " and widget.cget("text") != "b: " and widget.cget("text") != "step size: " and widget.cget("text") != "simulation duration: " and widget.cget("text") != "n1: " and widget.cget("text") != "n2: "  and widget.cget("text") != "J1: " and widget.cget("text") != "J2: ":
+                        widget.destroy()
                 errors = []
                 if self.number(step_size_new.get()) != -10000000:
                     self.step_size = self.number(step_size_new.get())

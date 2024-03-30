@@ -11,5 +11,5 @@ theta_eu, rot_speed_eu, time = eu_simulation.eu()
 theta_rk, rot_speed_rk, time = rk_simulation.rk4()
 
 #gui.show_plots(theta_rk, rot_speed_rk, theta_eu, rot_speed_eu, time)
-gui.show_gui(theta_rk, rot_speed_rk, theta_eu, rot_speed_eu, time)
+gui.show_gui()
 
