@@ -2,6 +2,9 @@ from simulation_parameters import SimulationParameters
 
 import math
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
+from tkinter import *
+#import PySimpleGUI as sg
 #import numpy as np
 
 class GUI:
@@ -51,6 +54,179 @@ class GUI:
         axes[1, 1].set_title("Rotational Speed Plot for Eu method")
         axes[1, 1].set_xlabel("Time")
         axes[1, 1].set_ylabel("Rotational Speed")
+        
+        #plt.tight_layout()
+        #plt.show()
+        
+        canvas = FigureCanvasTkAgg(fig, master=root)
+        canvas.draw()
+        canvas.get_tk_widget().pack()
 
-        plt.tight_layout()
-        plt.show()
+        toolbar = NavigationToolbar2Tk(canvas, root)
+        toolbar.update()
+
+        canvas.get_tk_widget().pack()
+        
+    #, step_size, simulation_duration, k, b, n1, n2, J1, J2
+    
+    def show_gui(self, theta_rk, rot_speed_rk, theta_eu, rot_speed_eu, time):
+            def plot_display():
+                fig, axes = plt.subplots(2, 2, figsize=(6, 4.5))  # 1 row, 2 columns
+
+                # theta plot
+                axes[0, 0].plot(time, theta_rk, linestyle='-')
+                axes[0, 0].set_title("Theta Plot for RK method")
+                axes[0, 0].set_xlabel("Time")
+                axes[0, 0].set_ylabel("Theta")
+
+                # rotational speed plot
+                axes[0, 1].plot(time, rot_speed_rk, linestyle='-')
+                axes[0, 1].set_title("Rotational Speed Plot for RK method")
+                axes[0, 1].set_xlabel("Time")
+                axes[0, 1].set_ylabel("Rotational Speed")
+
+                # theta plot
+                axes[1, 0].plot(time, theta_eu, linestyle='-')
+                axes[1, 0].set_title("Theta Plot for Eu method")
+                axes[1, 0].set_xlabel("Time")
+                axes[1, 0].set_ylabel("Theta")
+
+                # rotational speed plot
+                axes[1, 1].plot(time, rot_speed_eu, linestyle='-')
+                axes[1, 1].set_title("Rotational Speed Plot for Eu method")
+                axes[1, 1].set_xlabel("Time")
+                axes[1, 1].set_ylabel("Rotational Speed")
+                
+                plt.tight_layout()
+                #plt.show()
+                
+                canvas = FigureCanvasTkAgg(fig, master=root)
+                canvas.draw()
+                canvas.get_tk_widget().pack()
+
+                toolbar = NavigationToolbar2Tk(canvas, root)
+                toolbar.update()
+
+                canvas.get_tk_widget().pack()
+
+            root = Tk()
+
+            root.title("MMM")
+            screen_width = root.winfo_screenwidth()
+            screen_height = root.winfo_screenheight()
+            root.geometry('%dx%d+%d+%d' % (screen_width, screen_height, 0, 0))
+
+            intro = Label(root, text = "Write down parameters you want to update")
+            intro.pack()
+
+            step_size_lbl = Label(root, text = "step size: ")
+            step_size_lbl.pack()
+            step_size_new = Entry(root, width=30)
+            step_size_new.pack()
+
+            simulation_duration_lbl = Label(root, text = "simulation duration: ")
+            simulation_duration_lbl.pack()
+            simulation_duration_new = Entry(root, width=30)
+            simulation_duration_new.pack()
+
+            k_lbl = Label(root, text = "k: ")
+            k_lbl.pack()
+            k_new = Entry(root, width=30)
+            k_new.pack()
+            
+            b_lbl = Label(root, text = "b: ")
+            b_lbl.pack()
+            b_new = Entry(root, width=30)
+            b_new.pack()
+
+            n1_lbl = Label(root, text = "n1: ")
+            n1_lbl.pack()
+            n1_new = Entry(root, width=30)
+            n1_new.pack()
+
+            n2_lbl = Label(root, text = "n2: ")
+            n2_lbl.pack()
+            n2_new = Entry(root, width=30)
+            n2_new.pack()
+
+            J1_lbl = Label(root, text = "J1: ")
+            J1_lbl.pack()
+            J1_new = Entry(root, width=30)
+            J1_new.pack()
+
+            J2_lbl = Label(root, text = "J2: ")
+            J2_lbl.pack()
+            J2_new = Entry(root, width=30)
+            J2_new.pack()
+
+            def clicked():
+                errors = []
+                if self.number(step_size_new.get()) != -10000000:
+                    self.step_size = self.number(step_size_new.get())
+                else:
+                    errors.append("step size")
+
+                if self.number(simulation_duration_new.get()) != -10000000:
+                    self.simulation_duration = self.number(simulation_duration_new.get())
+                else:
+                    errors.append("simulation_duration")
+
+                if self.number(k_new.get()) != -10000000:
+                    self.k = self.number(k_new.get())
+                else:
+                    errors.append("k")
+
+                if self.number(b_new.get()) != -10000000:
+                    self.b = self.number(b_new.get())
+                else:
+                    errors.append("b")
+
+                if self.number(n1_new.get()) != -10000000:
+                    self.n1 = self.number(n1_new.get())
+                else:
+                    errors.append("n1")
+
+                if self.number(n2_new.get()) != -10000000:
+                    self.n2 = self.number(n2_new.get())
+                else:
+                    errors.append("n2")
+
+                if self.number(J1_new.get()) != -10000000:
+                    self.J1 = self.number(J1_new.get())
+                else:
+                    errors.append("J1")
+
+                if self.number(J2_new.get()) != -10000000:
+                    self.J2 = self.number(J2_new.get())
+                else:
+                    errors.append("J2")
+                error_lbl1 = Label(root)
+                error_lbl2 = Label(root)
+
+                error_lbl1.pack()
+                error_lbl2.pack()
+                if len(errors) != 0:
+                    error_msg1 = errors
+                    error_msg2 = "have not been a number and were not updated, other parameters have been updated successfully"
+                    error_lbl1.configure(text = error_msg1)
+                    error_lbl2.configure(text = error_msg2)
+                else:
+                    error_lbl1.configure(text = "All parameters has been updated properly")
+                    error_lbl2.configure(text = "")
+                errors.clear()
+
+            btn = Button(root, text = "Update parameters", command=clicked)
+            btn.pack()
+
+            btn2 = Button(root, text = "Show plots", command=plot_display)
+            btn2.pack()
+
+            root.mainloop()
+
+    def number(self, check):
+        try:
+            value = float(check)
+            return value
+        except ValueError:
+            return -10000000
+        
