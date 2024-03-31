@@ -31,138 +31,49 @@ class GUI:
         return SimulationParameters(self.step_size, self.simulation_duration, self.input_function, self.k, self.b, self.n1, self.n2, self.J1, self.J2)
 
     def show_plots(self, theta_rk, rot_speed_rk, theta_eu, rot_speed_eu, time):
-        fig, axes = plt.subplots(2, 2, figsize=(12, 9))  # 1 row, 2 columns
+        fig, axes = plt.subplots(1, 4, figsize=(24, 6))  # 2 row, 2 columns
 
         # theta plot
-        axes[0, 0].plot(time, theta_rk, linestyle='-')
-        axes[0, 0].set_title("Theta Plot for RK method")
-        axes[0, 0].set_xlabel("Time")
-        axes[0, 0].set_ylabel("Theta")
+        axes[0].plot(time, theta_rk, linestyle='-')
+        axes[0].set_title("Theta Plot for RK method")
+        axes[0].set_xlabel("Time")
+        axes[0].set_ylabel("Theta")
 
         # rotational speed plot
-        axes[0, 1].plot(time, rot_speed_rk, linestyle='-')
-        axes[0, 1].set_title("Rotational Speed Plot for RK method")
-        axes[0, 1].set_xlabel("Time")
-        axes[0, 1].set_ylabel("Rotational Speed")
+        axes[1].plot(time, rot_speed_rk, linestyle='-')
+        axes[1].set_title("Rotational Speed Plot for RK method")
+        axes[1].set_xlabel("Time")
+        axes[1].set_ylabel("Rotational Speed")
 
          # theta plot
-        axes[1, 0].plot(time, theta_eu, linestyle='-')
-        axes[1, 0].set_title("Theta Plot for Eu method")
-        axes[1, 0].set_xlabel("Time")
-        axes[1, 0].set_ylabel("Theta")
+        axes[2].plot(time, theta_eu, linestyle='-')
+        axes[2].set_title("Theta Plot for Eu method")
+        axes[2].set_xlabel("Time")
+        axes[2].set_ylabel("Theta")
 
         # rotational speed plot
-        axes[1, 1].plot(time, rot_speed_eu, linestyle='-')
-        axes[1, 1].set_title("Rotational Speed Plot for Eu method")
-        axes[1, 1].set_xlabel("Time")
-        axes[1, 1].set_ylabel("Rotational Speed")
+        axes[3].plot(time, rot_speed_eu, linestyle='-')
+        axes[3].set_title("Rotational Speed Plot for Eu method")
+        axes[3].set_xlabel("Time")
+        axes[3].set_ylabel("Rotational Speed")
         
-        #plt.tight_layout()
+        plt.tight_layout()
         #plt.show()
         
-        canvas = FigureCanvasTkAgg(fig, master=root)
-        canvas.draw()
-        canvas.get_tk_widget().pack()
-
-        toolbar = NavigationToolbar2Tk(canvas, root)
-        toolbar.update()
-
-        canvas.get_tk_widget().pack()
+        return fig
         
     def show_gui(self):
-            rk_simulation = RKSimulation(self.get_parameters())
-            eu_simulation = Eu_simulation(self.get_parameters())
             def plot_display():
+                rk_simulation = RKSimulation(self.get_parameters())
+                eu_simulation = Eu_simulation(self.get_parameters())
+
                 theta_eu, rot_speed_eu, time = eu_simulation.eu()
                 theta_rk, rot_speed_rk, time = rk_simulation.rk4()
-                fig, axes = plt.subplots(2, 2, figsize=(6, 4.5))  # 1 row, 2 columns
 
-                # theta plot
-                axes[0, 0].plot(time, theta_rk, linestyle='-')
-                axes[0, 0].set_title("Theta Plot for RK method")
-                axes[0, 0].set_xlabel("Time")
-                axes[0, 0].set_ylabel("Theta")
-
-                # rotational speed plot
-                axes[0, 1].plot(time, rot_speed_rk, linestyle='-')
-                axes[0, 1].set_title("Rotational Speed Plot for RK method")
-                axes[0, 1].set_xlabel("Time")
-                axes[0, 1].set_ylabel("Rotational Speed")
-
-                # theta plot
-                axes[1, 0].plot(time, theta_eu, linestyle='-')
-                axes[1, 0].set_title("Theta Plot for Eu method")
-                axes[1, 0].set_xlabel("Time")
-                axes[1, 0].set_ylabel("Theta")
-
-                # rotational speed plot
-                axes[1, 1].plot(time, rot_speed_eu, linestyle='-')
-                axes[1, 1].set_title("Rotational Speed Plot for Eu method")
-                axes[1, 1].set_xlabel("Time")
-                axes[1, 1].set_ylabel("Rotational Speed")
-                
-                plt.tight_layout()
-                #plt.show()
-                
-                canvas = FigureCanvasTkAgg(fig, master=root)
+                canvas = FigureCanvasTkAgg(self.show_plots(theta_rk, rot_speed_rk, theta_eu, rot_speed_eu, time), master=root)
                 canvas.draw()
                 canvas.get_tk_widget().pack()
-
-                toolbar = NavigationToolbar2Tk(canvas, root)
-                toolbar.update()
-
-                canvas.get_tk_widget().pack()
-
-            root = Tk()
-
-            root.title("MMM")
-            screen_width = root.winfo_screenwidth()
-            screen_height = root.winfo_screenheight()
-            root.geometry('%dx%d+%d+%d' % (screen_width, screen_height, 0, 0))
-
-            intro = Label(root, text = "Write down parameters you want to update")
-            intro.pack()
-
-            step_size_lbl = Label(root, text = "step size: ")
-            step_size_lbl.pack()
-            step_size_new = Entry(root, width=30)
-            step_size_new.pack()
-
-            simulation_duration_lbl = Label(root, text = "simulation duration: ")
-            simulation_duration_lbl.pack()
-            simulation_duration_new = Entry(root, width=30)
-            simulation_duration_new.pack()
-
-            k_lbl = Label(root, text = "k: ")
-            k_lbl.pack()
-            k_new = Entry(root, width=30)
-            k_new.pack()
             
-            b_lbl = Label(root, text = "b: ")
-            b_lbl.pack()
-            b_new = Entry(root, width=30)
-            b_new.pack()
-
-            n1_lbl = Label(root, text = "n1: ")
-            n1_lbl.pack()
-            n1_new = Entry(root, width=30)
-            n1_new.pack()
-
-            n2_lbl = Label(root, text = "n2: ")
-            n2_lbl.pack()
-            n2_new = Entry(root, width=30)
-            n2_new.pack()
-
-            J1_lbl = Label(root, text = "J1: ")
-            J1_lbl.pack()
-            J1_new = Entry(root, width=30)
-            J1_new.pack()
-
-            J2_lbl = Label(root, text = "J2: ")
-            J2_lbl.pack()
-            J2_new = Entry(root, width=30)
-            J2_new.pack()
-
             def clicked():
                 for widget in root.winfo_children():
                     if isinstance(widget, Label) and widget.cget("text") != "Write down parameters you want to update" and widget.cget("text") != "k: " and widget.cget("text") != "b: " and widget.cget("text") != "step size: " and widget.cget("text") != "simulation duration: " and widget.cget("text") != "n1: " and widget.cget("text") != "n2: "  and widget.cget("text") != "J1: " and widget.cget("text") != "J2: ":
@@ -221,6 +132,58 @@ class GUI:
                     error_lbl1.configure(text = "All parameters has been updated properly")
                     error_lbl2.configure(text = "")
                 errors.clear()
+
+            root = Tk()
+
+            root.title("MMM")
+            screen_width = root.winfo_screenwidth()
+            screen_height = root.winfo_screenheight()
+            root.geometry('%dx%d+%d+%d' % (screen_width, screen_height, 0, 0))
+
+            intro = Label(root, text = "Write down parameters you want to update")
+            intro.pack()
+
+            step_size_lbl = Label(root, text = "step size: ")
+            step_size_lbl.pack()
+            step_size_new = Entry(root, width=30)
+            step_size_new.pack()
+
+            simulation_duration_lbl = Label(root, text = "simulation duration: ")
+            simulation_duration_lbl.pack()
+            simulation_duration_new = Entry(root, width=30)
+            simulation_duration_new.pack()
+
+            k_lbl = Label(root, text = "k: ")
+            k_lbl.pack()
+            k_new = Entry(root, width=30)
+            k_new.pack()
+            
+            b_lbl = Label(root, text = "b: ")
+            b_lbl.pack()
+            b_new = Entry(root, width=30)
+            b_new.pack()
+
+            n1_lbl = Label(root, text = "n1: ")
+            n1_lbl.pack()
+            n1_new = Entry(root, width=30)
+            n1_new.pack()
+
+            n2_lbl = Label(root, text = "n2: ")
+            n2_lbl.pack()
+            n2_new = Entry(root, width=30)
+            n2_new.pack()
+
+            J1_lbl = Label(root, text = "J1: ")
+            J1_lbl.pack()
+            J1_new = Entry(root, width=30)
+            J1_new.pack()
+
+            J2_lbl = Label(root, text = "J2: ")
+            J2_lbl.pack()
+            J2_new = Entry(root, width=30)
+            J2_new.pack()
+
+            
 
             btn = Button(root, text = "Update parameters", command=clicked)
             btn.pack()
