@@ -31,7 +31,7 @@ class GUI:
         return SimulationParameters(self.step_size, self.simulation_duration, self.input_function, self.k, self.b, self.n1, self.n2, self.J1, self.J2)
 
     def show_plots(self, theta_rk, rot_speed_rk, theta_eu, rot_speed_eu, time):
-        fig, axes = plt.subplots(1, 4, figsize=(24, 6))  # 2 row, 2 columns
+        fig, axes = plt.subplots(1, 4, figsize=(18, 5))  # 2 row, 2 columns
 
         # theta plot
         axes[0].plot(time, theta_rk, linestyle='-')
@@ -72,8 +72,8 @@ class GUI:
 
                 canvas = FigureCanvasTkAgg(self.show_plots(theta_rk, rot_speed_rk, theta_eu, rot_speed_eu, time), master=root)
                 canvas.draw()
-                canvas.get_tk_widget().pack()
-            
+                canvas.get_tk_widget().grid(column=1, row=22)
+
             def clicked():
                 for widget in root.winfo_children():
                     if isinstance(widget, Label) and widget.cget("text") != "Write down parameters you want to update" and widget.cget("text") != "k: " and widget.cget("text") != "b: " and widget.cget("text") != "step size: " and widget.cget("text") != "simulation duration: " and widget.cget("text") != "n1: " and widget.cget("text") != "n2: "  and widget.cget("text") != "J1: " and widget.cget("text") != "J2: ":
@@ -118,11 +118,11 @@ class GUI:
                     self.J2 = self.number(J2_new.get())
                 else:
                     errors.append("J2")
+                
                 error_lbl1 = Label(root)
                 error_lbl2 = Label(root)
-
-                error_lbl1.pack()
-                error_lbl2.pack()
+                error_lbl1.grid(column=1, row=20, sticky=NW)
+                error_lbl2.grid(column=1, row=21, sticky=NW)
                 if len(errors) != 0:
                     error_msg1 = errors
                     error_msg2 = "have not been a number and were not updated, other parameters have been updated successfully"
@@ -141,55 +141,64 @@ class GUI:
             root.geometry('%dx%d+%d+%d' % (screen_width, screen_height, 0, 0))
 
             intro = Label(root, text = "Write down parameters you want to update")
-            intro.pack()
+            intro.grid(column=1, row=0, sticky=NW)
 
             step_size_lbl = Label(root, text = "step size: ")
-            step_size_lbl.pack()
+            step_size_lbl.grid(column=1, row=1, sticky=NW)
             step_size_new = Entry(root, width=30)
-            step_size_new.pack()
+            step_size_new.grid(column=1, row=2, sticky=NW)
 
             simulation_duration_lbl = Label(root, text = "simulation duration: ")
-            simulation_duration_lbl.pack()
+            simulation_duration_lbl.grid(column=1, row=3, sticky=NW)
             simulation_duration_new = Entry(root, width=30)
-            simulation_duration_new.pack()
+            simulation_duration_new.grid(column=1, row=4, sticky=NW)
 
             k_lbl = Label(root, text = "k: ")
-            k_lbl.pack()
+            k_lbl.grid(column=1, row=5, sticky=NW)
             k_new = Entry(root, width=30)
-            k_new.pack()
+            k_new.grid(column=1, row=6, sticky=NW)
             
             b_lbl = Label(root, text = "b: ")
-            b_lbl.pack()
+            b_lbl.grid(column=1, row=7, sticky=NW)
             b_new = Entry(root, width=30)
-            b_new.pack()
+            b_new.grid(column=1, row=8, sticky=NW)
 
             n1_lbl = Label(root, text = "n1: ")
-            n1_lbl.pack()
+            n1_lbl.grid(column=1, row=9, sticky=NW)
             n1_new = Entry(root, width=30)
-            n1_new.pack()
+            n1_new.grid(column=1, row=10, sticky=NW)
 
             n2_lbl = Label(root, text = "n2: ")
-            n2_lbl.pack()
+            n2_lbl.grid(column=1, row=11, sticky=NW)
             n2_new = Entry(root, width=30)
-            n2_new.pack()
+            n2_new.grid(column=1, row=12, sticky=NW)
 
             J1_lbl = Label(root, text = "J1: ")
-            J1_lbl.pack()
+            J1_lbl.grid(column=1, row=13, sticky=NW)
             J1_new = Entry(root, width=30)
-            J1_new.pack()
+            J1_new.grid(column=1, row=14, sticky=NW)
 
             J2_lbl = Label(root, text = "J2: ")
-            J2_lbl.pack()
+            J2_lbl.grid(column=1, row=15, sticky=NW)
             J2_new = Entry(root, width=30)
-            J2_new.pack()
+            J2_new.grid(column=1, row=16, sticky=NW)
 
             
 
             btn = Button(root, text = "Update parameters", command=clicked)
-            btn.pack()
+            btn.grid(column=1, row=17, sticky=NW)
 
             btn2 = Button(root, text = "Show plots", command=plot_display)
-            btn2.pack()
+            btn2.grid(column=1, row=18, sticky=NW)
+
+            btn3 = Button(root, text = "Quit", command = exit)
+            btn3.grid(column=1, row=19, sticky=NW)
+
+            #error_lbl1 = Label(root)
+            #error_lbl2 = Label(root)
+
+            #error_lbl1.grid(column=1, row=20, sticky=NW)
+            #error_lbl2.grid(column=1, row=21, sticky=NW)
 
             root.mainloop()
 
