@@ -6,8 +6,8 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationTool
 from tkinter import *
 from rk_simulation import RKSimulation
 from eu_simulation import Eu_simulation
-#import PySimpleGUI as sg
-#import numpy as np
+import sys
+import winsound
 
 class GUI:
     def __init__(self):
@@ -82,7 +82,7 @@ class GUI:
                 if self.number(step_size_new.get()) != -10000000:
                     self.step_size = self.number(step_size_new.get())
                 else:
-                    errors.append("step size")
+                    errors.append("step_size")
 
                 if self.number(simulation_duration_new.get()) != -10000000:
                     self.simulation_duration = self.number(simulation_duration_new.get())
