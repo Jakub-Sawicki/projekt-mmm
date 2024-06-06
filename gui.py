@@ -11,6 +11,7 @@ from tkinter import ttk
 
 class GUI:
     def __init__(self):
+        # initializing deafult parameter values
         self.step_size = 0.01
         self.simulation_duration = 200
         self.k = 1
@@ -19,7 +20,7 @@ class GUI:
         self.n2 = 15
         self.J1 = 10
         self.J2 = 15
-        self.signal_type = "harmonic"
+        self.signal_type = "square"
         
         self.signal_duration = 1
         self.signal_amplitude = 1
@@ -28,13 +29,6 @@ class GUI:
 
         self.error_code = -10000000
 
-    def input_function(self, t):
-        #return 1 if t >= 0 else 0
-        #return 100000 if t == 0 else 0
-        #return math.sin(2*3.14*t)
-        #return 0
-        return 1 if t >= 0 and t <= 10 else 0
-    
     def square_funciton(self, t):
         if (t >= 0 and t <= self.signal_duration):
             return self.signal_amplitude 
@@ -42,7 +36,16 @@ class GUI:
             return 0
 
     def triangle_function(self, t):
-        return self.signal_amplitude*sg.sawtooth(2*np.pi*self.signal_frequency*t, width=self.signal_period)
+        # Calculate the angular frequency 
+        omega = 2 * np.pi * self.signal_frequency
+
+        # Calculate the phase shift (normalized by period)
+        phase_shift = t / self.signal_period
+
+        # Define the triangular wave function using absolute values
+        y = abs(2 * self.signal_amplitude * (phase_shift % 1) - self.signal_amplitude)
+
+        return y
 
     def harmonic_function(self, t):
         return self.signal_amplitude*np.sin(2*np.pi*self.signal_frequency*t)
@@ -56,7 +59,7 @@ class GUI:
             return SimulationParameters(self.step_size, self.simulation_duration, self.harmonic_function, self.k, self.b, self.n1, self.n2, self.J1, self.J2)
 
     def show_plots(self, theta_rk, rot_speed_rk, theta_eu, rot_speed_eu, time):
-        fig, axes = plt.subplots(1, 4, figsize=(18, 5))  # 2 row, 2 columns
+        fig, axes = plt.subplots(1, 4, figsize=(15, 4))  # 2 row, 2 columns
 
         # theta plot rk
         axes[0].plot(time, theta_rk, linestyle='-')
@@ -160,11 +163,11 @@ class GUI:
             else:
                 errors.append("signal_amplitude")
 
-            if(self.signal_new.get() == "Square funciton"):
+            if(signal_new.get() == "Square function"):
                 self.signal_type = "square"
-            elif(self.signal_new.get() == "Triangle function"):
+            elif(signal_new.get() == "Triangle function"):
                 self.signal_type = "triangle"
-            elif(self.signal_new.get() == "Hamrmonic function"):
+            elif(signal_new.get() == "Harmonic function"):
                 self.signal_type = "harmonic"
             else:
                 errors.append("signal_type")
@@ -172,8 +175,8 @@ class GUI:
             
             error_lbl1 = Label(root)
             error_lbl2 = Label(root)
-            error_lbl1.grid(column=1, row=20, sticky=NW)
-            error_lbl2.grid(column=1, row=21, sticky=NW)
+            error_lbl1.grid(column=2, row=9, sticky=NW)
+            error_lbl2.grid(column=2, row=10, sticky=NW)
             if len(errors) != 0:
                 error_msg1 = errors
                 error_msg2 = "have not been a number and were not updated, other parameters have been updated successfully"
@@ -258,13 +261,13 @@ class GUI:
         
 
         btn = Button(root, text = "Update parameters", command=clicked)
-        btn.grid(column=1, row=17, sticky=NW)
+        btn.grid(column=2, row=11, sticky=NW)
 
         btn2 = Button(root, text = "Show plots", command=plot_display)
-        btn2.grid(column=1, row=18, sticky=NW)
+        btn2.grid(column=2, row=12, sticky=NW)
 
         btn3 = Button(root, text = "Quit", command = exit)
-        btn3.grid(column=1, row=19, sticky=NW)
+        btn3.grid(column=2, row=13, sticky=NW)
 
         root.mainloop()
 
