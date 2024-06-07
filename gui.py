@@ -4,7 +4,6 @@ from eu_simulation import Eu_simulation
 
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy import signal as sg
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 from tkinter import *
 from tkinter import ttk
